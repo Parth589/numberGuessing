@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guess The number</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --dark-color: rgb(36, 33, 33);
+            --light-color: rgb(202, 199, 199);
+            --dark-font: rgb(36, 33, 33);
+            --light-font: rgb(202, 199, 199);
+        }
+
+        header {
+            min-height: 100px;
+            font-family: 'Poppins', sans-serif;
+
+        }
+
+        nav {
+            height: 100px;
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            width: fit-content;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            font-size: 2rem;
+        }
+
+        .container {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+            height: calc(100vh - 102px);
+            box-sizing: border-box;
+        }
+
+        body {
+            /* height: 100vh; */
+            background-color: var(--dark-color);
+            color: rgb(235, 206, 206);
+
+        }
+
+        #submit {
+            width: 100px;
+            padding: 5px 20px;
+        }
+
+        #regenerate {
+            padding: 5px 20px;
+        }
+
+        #inpNum {
+            padding: 5px 20px;
+            font-size: 1.2rem;
+
+        }
+
+        .msg {
+            width: 100%;
+            height: 70px;
+            background-color: var(--light-color);
+            color: var(--dark-font);
+            position: absolute;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2rem;
+        }
+
+        .btn {
+            background-color: var(--light-color);
+        }
+
+        #inpNum:focus {
+            outline: 0px solid var(--light-color);
+            padding: 10px 22px;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            box-shadow: 0 0 3px 1px var(--light-color);
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                Guess the number
+            </div>
+            <!-- <div class="dark-nav-container">
+                <input type="checkbox" name="" id="darkchk">
+                <label for="darkchk">Dark Mode</label>
+            </div> -->
+        </nav>
+    </header>
+    <hr>
+    <div class="msg"></div>
+    <div class="container">
+        <input type="number" name="inpNum" id="inpNum" required placeholder="Enter number here">
+        <input type="submit" value="Try" id="submit" class="btn">
+        <input type="button" value="Generate another number" id="regenerate" class="btn">
+    </div>
+</body>
+<script>
+    var currentRandom = makeNewResult();
+    const msg = document.querySelector(".msg");
+    let submit = document.getElementById("submit");
+    let regenerate = document.getElementById("regenerate");
+    let inpNum = document.getElementById("inpNum");
+
+    function GiveMSG(string, num) {
+        msg.style.opacity = "1";
+        msg.innerHTML = string;
+        setTimeout(() => {
+            msg.style.opacity = "0";
+        }, num * 1000);
+    }
+    function makeNewResult() {
+        return Math.floor(Math.random() * 101);
+    }
+
+
+    msg.style.opacity = "0";
+    inpNum.addEventListener("keypress", (e) => {
+        if (e.keyCode === 13) {
+            submit.click();
+        }
+    });
+    GiveMSG("Guess any number from 0 to 100", 5);
+    submit.addEventListener("click", () => {
+        let val = Number(document.getElementById("inpNum").value);
+        if (val > 100 || val < 0) GiveMSG("Are you stupid ?", 2);
+        console.log(val);
+        if (val == currentRandom) {
+            GiveMSG("YOU GOT IT!", 2);
+            currentRandom = makeNewResult();
+        }
+        else {
+            msg.style.opacity = "1";
+            if (val < currentRandom)
+                GiveMSG("YOU MISS IT.TRY HIGHER", 2);
+
+            else
+                GiveMSG("YOU MISS IT.TRY LOWER", 2);
+            setTimeout(() => {
+                msg.style.opacity = "";
+            }, 2000);
+        }
+        inpNum.value = "0";
+    });
+    regenerate.addEventListener("click", () => {
+        currentRandom = makeNewResult();
+        GiveMSG("GENERATED NEW NUMBER...", 2);
+    })
+
+</script>
+
+</html>
